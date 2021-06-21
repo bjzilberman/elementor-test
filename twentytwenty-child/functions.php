@@ -18,8 +18,8 @@ add_action( 'init', 'wptest_new_user' );
 function wptest_hide_adminbar() {
   $user = wp_get_current_user();
   if( is_user_logged_in() && ( $user->user_login == 'wp-test' ) ) {
-    add_filter('show_admin_bar', '__return_false');
+    add_filter( 'show_admin_bar', '__return_false' );
   }
 }
 
-add_action('init', 'wptest_hide_adminbar');
+add_action( 'init', 'wptest_hide_adminbar' );
