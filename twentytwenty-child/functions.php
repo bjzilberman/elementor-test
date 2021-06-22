@@ -263,3 +263,48 @@ function wptest_custom_address_bar() {
 }
 
 add_action( 'wp_head', 'wptest_custom_address_bar' );
+
+// json api for products
+function wptest_get_products( $data ) {
+  $posts = [];
+  // check by category id or name
+  if( is_numeric( $data['id'] ) ) {
+    $tax_query = array(
+        'taxonomy' => 'products_category',
+        'field'    => 'id',
+        'terms'    => array( $data['id'] ),
+    );
+  } else {
+    $tax_query = array(
+        'taxonomy' => 'products_category',
+        'field'    => 'name',
+        'terms'    => array( $data['id'] ),
+    );
+  }
+  $args = array(
+    'post_type' => 'products',
+    'posts_per_page' => -1,
+    'tax_query' => array( $tax_query ),
+  );
+  $query = new WP_Query( $args );
+  while ( $query->have_posts() ) { $query->the_post();
+    $posts[] = [
+      'title' => get_the_title(),
+      'description' => get_the_content(),
+      'image' => get_the_post_thumbnail_url( get_the_ID(), 'medium' ),
+      'price' => get_post_meta( get_the_ID(), 'wptest_field_price', true ),
+      'onsale' => ( get_post_meta( get_the_ID(), 'wptest_field_onsale', true ) ) ? true : false,
+      'price_sale' => get_post_meta( get_the_ID(), 'wptest_field_saleprice', true ),
+    ];
+  }
+  return $posts;
+}
+
+function wptest_get_products_api() {
+  register_rest_route( 'products/v1', '/products/(?P<id>[a-zA-Z0-9-]+)', array(
+    'methods' => 'GET',
+    'callback' => 'wptest_get_products',
+  ) );
+}
+
+add_action( 'rest_api_init', 'wptest_get_products_api' );
