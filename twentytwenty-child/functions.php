@@ -190,7 +190,54 @@ function wptest_single_product_page( $content ) {
   if( is_single() && get_post_type() == 'products' ) {
     echo $content;
     get_template_part( 'parts/single-product' );
+  } else {
+    return $content;
   }
 }
 
 add_filter( 'the_content', 'wptest_single_product_page' );
+
+// product box shortcode
+function wptest_product_inabox( $atts = array() ) {
+    $atts = array_change_key_case( (array) $atts, CASE_LOWER );
+    $inabox_atts = shortcode_atts(
+        array(
+            'product_id' => 0,
+            'bg_color' => '#fff'
+        ), $atts
+    );
+
+    $product_inabox = '';
+
+    $args = array(
+      'post_type' => 'products',
+      'post_status' => 'publish',
+      'posts_per_page' => 3,
+      'p' => $inabox_atts['product_id'],
+    );
+    $inabox = new WP_Query( $args );
+    while ( $inabox->have_posts() ) { $inabox->the_post();
+      $image = get_the_post_thumbnail_url( get_the_ID(), 'medium' );
+      $title = get_the_title();
+      $price = get_post_meta( get_the_ID(), 'wptest_field_price', true );
+      $price_onsale = get_post_meta( get_the_ID(), 'wptest_field_saleprice', true );
+      $onsale = get_post_meta( get_the_ID(), 'wptest_field_onsale', true );
+      $product_inabox .= '<div><a href="' . get_the_permalink() . '" class="product-inabox" style="background-color: ' . $inabox_atts['bg_color'] . '">';
+      $product_inabox .= '<div class="inabox-title">' . $title . '</div>';
+      $product_inabox .= '<div class="inabox-title"></div>';
+      if( !empty( $image ) ) {
+        $product_inabox .= '<div class="inabox-image"><img src="' . $image . '" /></div>';
+      }
+      $product_inabox .= '<div class="inabox-price">';
+      if( $onsale ) {
+        $product_inabox .= '<span class="color-accent">On Sale!</span> ' . '<s>' . $price . '</s> ' . $price_onsale;
+      } else {
+        $product_inabox .= $price;
+      }
+      $product_inabox .= '</div>';
+      $product_inabox .= '</a></div>';
+    }
+    wp_reset_postdata();
+    return $product_inabox;
+}
+add_shortcode('product', 'wptest_product_inabox');
