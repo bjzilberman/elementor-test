@@ -7,3 +7,97 @@
  Template:     twentytwenty
  Version:      1.0.0
 */
+
+.wptest-homepage-grid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: wrap;
+}
+  .wptest-grid-heading {
+    text-align: center;
+  }
+  .wptest-single-product {
+    padding: 1em;
+    width: calc( 100% / 3 );
+    box-sizing: border-box;
+  }
+    .wptest-single-product .inner {
+      padding: 2em;
+      background: #fff;
+      box-sizing: border-box;
+      position: relative;
+    }
+      .wptest-single-product .inner .product-title {
+        margin-bottom: 1em;
+        font-weight: 600;
+        font-size: 2rem;
+      }
+      .wptest-single-product .inner .product-image {
+        width: 100%;
+        height: 200px;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+        .wptest-single-product .inner .product-image img {
+          width: 100%;
+        }
+      .wptest-single-product .inner .on-sale {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 100px;
+        height: 100px;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-flow: column;
+      }
+        .wptest-single-product .inner .on-sale span {
+          background: #cd2653;
+          margin: 0 0 2em 2em;
+          padding: .25em 0;
+          display: block;
+          font-weight: 600;
+          font-size: 14px;
+          transform: rotate(45deg);
+          width: 200%;
+          text-align: center;
+          color: #fff;
+        }
+  .single-product-page {
+    background: #fff;
+    padding: 1em;
+  }
+    .single-product-page .product-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1em;
+    }
+      .single-product-page .product-info .pinfo-line {
+        width: 100%;
+        height: 10px;
+        border-bottom: 1px #ccc dotted;
+        margin: 0 .5em;
+      }
+      .single-product-page .product-info .pinfo-value,
+      .single-product-page .product-info .pinfo-key {
+        flex-shrink: 0;
+      }
+      .single-product-page .product-info .pinfo-value s {
+        color: #ccc;
+      }
+  @media screen and (max-width: 1000px) {
+    .wptest-single-product {
+      width: 50%;
+    }
+  }
+  @media screen and (max-width: 768px) {
+    .wptest-single-product {
+      width: 100%;
+    }
+  }
