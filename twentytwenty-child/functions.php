@@ -240,4 +240,26 @@ function wptest_product_inabox( $atts = array() ) {
     wp_reset_postdata();
     return $product_inabox;
 }
+
 add_shortcode('product', 'wptest_product_inabox');
+
+// function to override return value
+function wptest_shortcode_filter( $content ) {
+  $content .= '<div>Override shortcode return value</div>';
+  // Actually override:
+  // $content = '<div>Override shortcode return value</div>';
+  return $content;
+}
+
+add_filter( 'do_shortcode_tag', 'wptest_shortcode_filter' );
+
+// custom color for address bar
+function wptest_custom_address_bar() {
+  $color = '#cd2653';
+  $address_bar = '<meta name="theme-color" content="' . $color . '">';
+  $address_bar .= '<meta name="msapplication-navbutton-color" content="' . $color . '">';
+  $address_bar .= '<meta name="apple-mobile-web-app-status-bar-style" content="' . $color . '">';
+  echo $address_bar;
+}
+
+add_action( 'wp_head', 'wptest_custom_address_bar' );
